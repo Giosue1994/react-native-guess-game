@@ -1,18 +1,24 @@
 import { useState } from "react";
 import { StyleSheet, Text, View, TextInput, Alert } from "react-native";
 import PrimaryButton from "../components/PrimaryButton";
+import Title from "../components/Title";
+import Colors from "../constants/colors";
 
-export default function StartGameScreen() {
+export default function StartGameScreen({ onConfirm }) {
   const [number, setNumber] = useState("");
 
   function userNumberHandler(userNumber) {
     setNumber(userNumber);
   }
 
+  function resetNumberHandler() {
+    setNumber("");
+  }
+
   function confirmNumberHandler() {
     const chosenNumber = parseInt(number);
 
-    if (isNaN(chosenNumber) || chosenNumber > 99 || chosenNumber < 1) {
+    if (isNaN(chosenNumber) || chosenNumber > 99 || chosenNumber <= 0) {
       Alert.alert(
         "Invalid number!",
         "Number has to be a number between 1 and 99.",
@@ -22,15 +28,12 @@ export default function StartGameScreen() {
     }
 
     setNumber("");
-  }
-
-  function resetNumberHandler() {
-    setNumber("");
+    onConfirm(chosenNumber);
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Guess My Number</Text>
+      <Title>Guess My Number</Title>
 
       <View style={styles.inputContainer}>
         <Text style={styles.inputTitle}>Enter a number</Text>
@@ -62,23 +65,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  title: {
-    fontSize: 25,
-    borderWidth: 3,
-    borderColor: "#ffffff",
-    color: "#ffffff",
-    padding: 8,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 30,
-  },
+
   inputContainer: {
     width: "90%",
     padding: 8,
     borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#3d001f",
+    backgroundColor: Colors.primary800,
     elevation: 4, // box shadow per android
     shadowColor: "#000", // box shadow per ios
     shadowOffset: { width: 0, height: 2 }, // box shadow per ios
@@ -87,14 +81,14 @@ const styles = StyleSheet.create({
   },
   inputTitle: {
     fontSize: 20,
-    color: "#ddb52f",
+    color: Colors.accent500,
     textAlign: "center",
     marginBottom: 10,
   },
   textInput: {
-    color: "#ddb52f",
+    color: Colors.accent500,
     borderBottomWidth: 2,
-    borderBottomColor: "#ddb52f",
+    borderBottomColor: Colors.accent500,
     padding: 5,
     textAlign: "center",
     fontSize: 30,
