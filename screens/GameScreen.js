@@ -1,15 +1,71 @@
-import { View, Text, StyleSheet } from "react-native";
-import React from "react";
+import { useEffect, useState } from "react";
+import { View, Text, StyleSheet, Alert } from "react-native";
 import Title from "../components/Title";
 import PrimaryButton from "../components/PrimaryButton";
 import Colors from "../constants/colors";
 
-export default function GameScreen({ number }) {
+function generateRandomBetween(min, max, exclude) {
+  const rndNum = Math.floor(Math.random() * (max - min)) + min;
+
+  if (rndNum === exclude) {
+    return generateRandomBetween(min, max, exclude);
+  } else {
+    return rndNum;
+  }
+}
+
+let minLimit = 1;
+let maxLimit = 100;
+
+export default function GameScreen({ userNumber, onGameOver }) {
+  const initialGuess = generateRandomBetween(1, 100, userNumber);
+  const [currentGuess, setCurrentGuess] = useState(initialGuess);
+
+  function higherHandler() {
+    if (currentGuess > userNumber) {
+      Alert.alert("Don't lie!", "You know that this is wrong...", [
+        { text: "Sorry!", style: "cancel" },
+      ]);
+      return;
+    }
+
+    minLimit = currentGuess + 1;
+    const newRandomNumber = generateRandomBetween(
+      minLimit,
+      maxLimit,
+      currentGuess
+    );
+    setCurrentGuess(newRandomNumber);
+  }
+
+  function lowerHandler() {
+    if (currentGuess < userNumber) {
+      Alert.alert("Don't lie!", "You know that this is wrong...", [
+        { text: "Sorry!", style: "cancel" },
+      ]);
+      return;
+    }
+
+    maxLimit = currentGuess;
+    const newRandomNumber = generateRandomBetween(
+      minLimit,
+      maxLimit,
+      currentGuess
+    );
+    setCurrentGuess(newRandomNumber);
+  }
+
+  useEffect(() => {
+    if (currentGuess === userNumber) {
+      onGameOver();
+    }
+  }, [currentGuess, userNumber, onGameOver]);
+
   return (
     <View style={styles.container}>
       <Title>Opponent's Guess</Title>
       <View style={styles.guessContainer}>
-        <Text style={styles.guessNumber}>{Math.floor(Math.random() * 99)}</Text>
+        <Text style={styles.guessNumber}>{currentGuess}</Text>
       </View>
 
       <View style={styles.inputContainer}>
@@ -17,10 +73,10 @@ export default function GameScreen({ number }) {
 
         <View style={styles.buttonsContainer}>
           <View style={styles.buttonContainer}>
-            <PrimaryButton title="-" pressFn={[]} />
+            <PrimaryButton title="-" pressFn={lowerHandler} />
           </View>
           <View style={styles.buttonContainer}>
-            <PrimaryButton title="+" pressFn={[]} />
+            <PrimaryButton title="+" pressFn={higherHandler} />
           </View>
         </View>
       </View>
@@ -48,7 +104,7 @@ const styles = StyleSheet.create({
     marginBottom: 60,
   },
   guessNumber: {
-    fontSize: 30,
+    fontSize: 35,
     color: Colors.accent500,
     textAlign: "center",
     fontWeight: "bold",
