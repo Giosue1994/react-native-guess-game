@@ -16,8 +16,8 @@ export default function App() {
   const [gameIsOver, setGameIsOver] = useState(true);
 
   const [fontsLoaded, fontError] = useFonts({
-    "Opens-Sans": require("./assets/fonts/OpenSans-Regular.ttf"),
-    "Opens-Sans-Bold": require("./assets/fonts/OpenSans-Bold.ttf"),
+    "Open-Sans": require("./assets/fonts/OpenSans-Regular.ttf"),
+    "Open-Sans-Bold": require("./assets/fonts/OpenSans-Bold.ttf"),
   });
 
   const onLayoutRootView = useCallback(async () => {
@@ -48,7 +48,7 @@ export default function App() {
   }
 
   if (gameIsOver && userNumber) {
-    screen = <GameOverScreen />;
+    screen = <GameOverScreen userNumber={userNumber} />;
   }
 
   return (

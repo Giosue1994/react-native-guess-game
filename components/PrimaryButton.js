@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
   buttonInnerContainer: {
     backgroundColor: Colors.primary500,
     paddingVertical: 10,
+    paddingHorizontal: 20,
     elevation: 2,
   },
   pressedItem: {

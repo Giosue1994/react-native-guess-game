@@ -10,7 +10,7 @@ export default function Title({ children }) {
 
 const styles = StyleSheet.create({
   title: {
-    fontFamily: "Opens-Sans-Bold",
+    fontFamily: "Open-Sans-Bold",
     fontSize: 25,
     borderWidth: 3,
     borderColor: "#ffffff",
