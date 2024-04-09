@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Alert } from "react-native";
+import { View, Text, StyleSheet, Alert, FlatList } from "react-native";
 import Title from "../components/Title";
 import Card from "../components/Card";
 import PrimaryButton from "../components/PrimaryButton";
 import Colors from "../constants/colors";
 import { Ionicons } from "@expo/vector-icons";
+import LogItem from "../components/LogItem";
 
 function generateRandomBetween(min, max, exclude) {
   const rndNum = Math.floor(Math.random() * (max - min)) + min;
@@ -22,6 +23,7 @@ let maxLimit = 100;
 export default function GameScreen({ userNumber, onGameOver }) {
   const initialGuess = generateRandomBetween(1, 100, userNumber);
   const [currentGuess, setCurrentGuess] = useState(initialGuess);
+  const [guessRounds, setGuessRounds] = useState([initialGuess]);
 
   function higherLowerHandler(direction) {
     if (
@@ -47,13 +49,21 @@ export default function GameScreen({ userNumber, onGameOver }) {
       currentGuess
     );
     setCurrentGuess(newRandomNumber);
+
+    setGuessRounds((prevRounds) => {
+      return [newRandomNumber, ...prevRounds];
+    });
   }
+
+  let guessRoundListLength = guessRounds.length;
 
   useEffect(() => {
     if (currentGuess === userNumber) {
-      onGameOver();
+      onGameOver(guessRoundListLength);
+      minLimit = 1;
+      maxLimit = 100;
     }
-  }, [currentGuess, userNumber, onGameOver]);
+  }, [currentGuess, userNumber, onGameOver, guessRoundListLength]);
 
   return (
     <View style={styles.container}>
@@ -77,8 +87,16 @@ export default function GameScreen({ userNumber, onGameOver }) {
         </View>
       </Card>
 
-      <View>
-        <Text>LOG</Text>
+      <View style={styles.listContainer}>
+        <FlatList
+          data={guessRounds}
+          renderItem={({ item, index }) => (
+            <LogItem index={guessRoundListLength - index} guessNumber={item} />
+          )}
+          keyExtractor={(item) => {
+            return item;
+          }}
+        />
       </View>
     </View>
   );
@@ -86,6 +104,7 @@ export default function GameScreen({ userNumber, onGameOver }) {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: 100,
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
@@ -111,5 +130,11 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flex: 1,
+  },
+  listContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 16,
   },
 });
