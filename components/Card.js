@@ -26,8 +26,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5, // box shadow per ios
   },
   cardTitle: {
+    fontFamily: "Opens-Sans-Bold",
     fontSize: 23,
-    fontWeight: "bold",
     color: Colors.accent500,
     textAlign: "center",
     marginBottom: 10,

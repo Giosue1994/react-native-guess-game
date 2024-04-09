@@ -1,15 +1,34 @@
-import { useState } from "react";
-import { StyleSheet, SafeAreaView, ImageBackground } from "react-native";
+import { useState, useCallback } from "react";
+import { View, StyleSheet, SafeAreaView, ImageBackground } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "expo-status-bar";
 import StartGameScreen from "./screens/StartGameScreen";
 import GameScreen from "./screens/GameScreen";
-import Colors from "./constants/colors";
 import GameOverScreen from "./screens/GameOverScreen";
+import Colors from "./constants/colors";
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
+
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [userNumber, setUserNumber] = useState();
   const [gameIsOver, setGameIsOver] = useState(true);
+
+  const [fontsLoaded, fontError] = useFonts({
+    "Opens-Sans": require("./assets/fonts/OpenSans-Regular.ttf"),
+    "Opens-Sans-Bold": require("./assets/fonts/OpenSans-Bold.ttf"),
+  });
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded || fontError) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError]);
+
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
 
   function userNumberHandler(number) {
     setUserNumber(number);
@@ -36,6 +55,7 @@ export default function App() {
     <>
       <StatusBar style="light" />
       <LinearGradient
+        onLayout={onLayoutRootView}
         colors={[Colors.primary700, Colors.accent500]}
         style={styles.rootScreen}
       >

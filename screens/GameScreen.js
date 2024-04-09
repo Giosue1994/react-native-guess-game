@@ -100,10 +100,10 @@ const styles = StyleSheet.create({
     marginBottom: 60,
   },
   guessNumber: {
+    fontFamily: "Opens-Sans-Bold",
     fontSize: 35,
     color: Colors.accent500,
     textAlign: "center",
-    fontWeight: "bold",
   },
   buttonsContainer: {
     flexDirection: "row",
