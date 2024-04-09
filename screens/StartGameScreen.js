@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TextInput, Alert } from "react-native";
 import PrimaryButton from "../components/PrimaryButton";
 import Title from "../components/Title";
 import Colors from "../constants/colors";
+import Card from "../components/Card";
 
 export default function StartGameScreen({ onConfirm }) {
   const [number, setNumber] = useState("");
@@ -35,9 +36,7 @@ export default function StartGameScreen({ onConfirm }) {
     <View style={styles.container}>
       <Title>Guess My Number</Title>
 
-      <View style={styles.inputContainer}>
-        <Text style={styles.inputTitle}>Enter a number</Text>
-
+      <Card title="Enter a number">
         <TextInput
           style={styles.textInput}
           value={number}
@@ -48,13 +47,15 @@ export default function StartGameScreen({ onConfirm }) {
 
         <View style={styles.buttonsContainer}>
           <View style={styles.buttonContainer}>
-            <PrimaryButton title="Reset" pressFn={resetNumberHandler} />
+            <PrimaryButton pressFn={resetNumberHandler}>Reset</PrimaryButton>
           </View>
           <View style={styles.buttonContainer}>
-            <PrimaryButton title="Confirm" pressFn={confirmNumberHandler} />
+            <PrimaryButton pressFn={confirmNumberHandler}>
+              Confirm
+            </PrimaryButton>
           </View>
         </View>
-      </View>
+      </Card>
     </View>
   );
 }
@@ -64,26 +65,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-  },
-
-  inputContainer: {
-    width: "90%",
-    padding: 8,
-    borderRadius: 10,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: Colors.primary800,
-    elevation: 4, // box shadow per android
-    shadowColor: "#000", // box shadow per ios
-    shadowOffset: { width: 0, height: 2 }, // box shadow per ios
-    shadowRadius: 6, // box shadow per ios
-    shadowOpacity: 0.5, // box shadow per ios
-  },
-  inputTitle: {
-    fontSize: 20,
-    color: Colors.accent500,
-    textAlign: "center",
-    marginBottom: 10,
   },
   textInput: {
     color: Colors.accent500,
@@ -102,5 +83,9 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flex: 1,
+  },
+  buttonText: {
+    color: "#ffffff",
+    textAlign: "center",
   },
 });

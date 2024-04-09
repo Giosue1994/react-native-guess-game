@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Alert } from "react-native";
 import Title from "../components/Title";
+import Card from "../components/Card";
 import PrimaryButton from "../components/PrimaryButton";
 import Colors from "../constants/colors";
+import { Ionicons } from "@expo/vector-icons";
 
 function generateRandomBetween(min, max, exclude) {
   const rndNum = Math.floor(Math.random() * (max - min)) + min;
@@ -21,32 +23,24 @@ export default function GameScreen({ userNumber, onGameOver }) {
   const initialGuess = generateRandomBetween(1, 100, userNumber);
   const [currentGuess, setCurrentGuess] = useState(initialGuess);
 
-  function higherHandler() {
-    if (currentGuess > userNumber) {
+  function higherLowerHandler(direction) {
+    if (
+      (direction === "higher" && currentGuess > userNumber) ||
+      (direction === "lower" && currentGuess < userNumber)
+    ) {
       Alert.alert("Don't lie!", "You know that this is wrong...", [
         { text: "Sorry!", style: "cancel" },
       ]);
       return;
     }
 
-    minLimit = currentGuess + 1;
-    const newRandomNumber = generateRandomBetween(
-      minLimit,
-      maxLimit,
-      currentGuess
-    );
-    setCurrentGuess(newRandomNumber);
-  }
-
-  function lowerHandler() {
-    if (currentGuess < userNumber) {
-      Alert.alert("Don't lie!", "You know that this is wrong...", [
-        { text: "Sorry!", style: "cancel" },
-      ]);
-      return;
+    if (direction === "higher") {
+      minLimit = currentGuess + 1;
+    } else {
+      maxLimit = currentGuess;
     }
 
-    maxLimit = currentGuess;
+    // al click dei pulsanti generare un nuovo numero in base ai limiti imposti sopra
     const newRandomNumber = generateRandomBetween(
       minLimit,
       maxLimit,
@@ -68,18 +62,20 @@ export default function GameScreen({ userNumber, onGameOver }) {
         <Text style={styles.guessNumber}>{currentGuess}</Text>
       </View>
 
-      <View style={styles.inputContainer}>
-        <Text style={styles.inputTitle}>Higher or Lower?</Text>
-
+      <Card title="Higher or Lower?">
         <View style={styles.buttonsContainer}>
           <View style={styles.buttonContainer}>
-            <PrimaryButton title="-" pressFn={lowerHandler} />
+            <PrimaryButton pressFn={() => higherLowerHandler("lower")}>
+              <Ionicons name="remove-circle-outline" size={24} color="#fff" />
+            </PrimaryButton>
           </View>
           <View style={styles.buttonContainer}>
-            <PrimaryButton title="+" pressFn={higherHandler} />
+            <PrimaryButton pressFn={() => higherLowerHandler("higher")}>
+              <Ionicons name="add-circle-outline" size={24} color="#fff" />
+            </PrimaryButton>
           </View>
         </View>
-      </View>
+      </Card>
 
       <View>
         <Text>LOG</Text>
@@ -109,26 +105,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
   },
-  inputContainer: {
-    width: "80%",
-    padding: 8,
-    borderRadius: 10,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: Colors.primary800,
-    elevation: 4, // box shadow per android
-    shadowColor: "#000", // box shadow per ios
-    shadowOffset: { width: 0, height: 2 }, // box shadow per ios
-    shadowRadius: 6, // box shadow per ios
-    shadowOpacity: 0.5, // box shadow per ios
-  },
-  inputTitle: {
-    fontSize: 20,
-    color: Colors.accent500,
-    textAlign: "center",
-    marginBottom: 10,
-  },
-
   buttonsContainer: {
     flexDirection: "row",
     alignItems: "center",
