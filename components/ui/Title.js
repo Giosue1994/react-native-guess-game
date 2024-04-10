@@ -1,11 +1,7 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text } from "react-native";
 
 export default function Title({ children }) {
-  return (
-    <View>
-      <Text style={styles.title}>{children}</Text>
-    </View>
-  );
+  return <Text style={styles.title}>{children}</Text>;
 }
 
 const styles = StyleSheet.create({
@@ -18,5 +14,7 @@ const styles = StyleSheet.create({
     padding: 8,
     textAlign: "center",
     marginBottom: 30,
+    maxWidth: "80%",
+    width: 300,
   },
 });

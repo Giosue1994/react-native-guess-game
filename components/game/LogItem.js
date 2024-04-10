@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import Colors from "../constants/colors";
+import Colors from "../../constants/colors";
 
 export default function Log({ index, guessNumber }) {
   return (
@@ -18,11 +18,9 @@ export default function Log({ index, guessNumber }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     paddingHorizontal: 20,
   },
   logContainer: {
-    flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
